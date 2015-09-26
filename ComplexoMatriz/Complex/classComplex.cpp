@@ -18,7 +18,7 @@ Complex Complex::operator+(float aIn) {
 	return Complex((aIn + this->a), this->b);
 }
 
-Complex Complex::operator+(Complex& parm) {
+Complex Complex::operator+(const Complex& parm) {
 	return Complex((this->a + parm.a), (this->b + parm.b));
 }
 
@@ -26,7 +26,7 @@ Complex Complex::operator-(float aIn) {
 	return Complex((aIn - this->a), this->b);
 }
 
-Complex Complex::operator-(Complex& parm) {
+Complex Complex::operator-(const Complex& parm) {
 	return Complex((this->a - parm.a), (this->b - parm.b));
 }
 
@@ -34,7 +34,7 @@ Complex Complex::operator*(float aIn) {
 	return Complex((aIn * this->a), this->b);
 }
 
-Complex Complex::operator*(Complex& parm) {
+Complex Complex::operator*(const Complex& parm) {
 	//(ac + bdx²) + (bc+ad)x
 	return Complex(((this->a * parm.a) + ((this->b * parm.b) * -1)), ((this->b*parm.a + this->a*parm.b)));
 }

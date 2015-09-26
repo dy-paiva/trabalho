@@ -11,12 +11,12 @@ class Complex {
 		void print();
 		
 		Complex operator+(float);
-		Complex operator+(Complex&);
+		Complex operator+(const Complex&);
 
 		Complex operator-(float);
-		Complex operator-(Complex&);
+		Complex operator-(const Complex&);
 
 		Complex operator*(float);
-		Complex operator*(Complex&);
+		Complex operator*(const Complex&);
 
 };

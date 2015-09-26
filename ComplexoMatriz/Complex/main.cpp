@@ -10,7 +10,7 @@ int main() {
 	a = a - c;
 	a.print();
 	a = a * b;
-	//a = a + c * (b + 7);
+	a = a + c * (b + 7);
 	
 	a.print();
 	
