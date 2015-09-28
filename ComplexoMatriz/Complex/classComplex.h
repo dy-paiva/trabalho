@@ -1,22 +1,24 @@
 #include <iostream>
-
-using namespace std;
+#include <vector>
 
 class Complex {
 	public:
-		float a, b;
+		vector<float> a;
+		vector<float> b;
 		Complex();
 		Complex(float);
 		Complex(float, float);
 		void print();
+
+		void somar();
 		
-		Complex operator+(float);
-		Complex operator+(const Complex&);
+		// Complex operator+(float);
+		// Complex operator+(const Complex&);
 
-		Complex operator-(float);
-		Complex operator-(const Complex&);
+		// Complex operator-(float);
+		// Complex operator-(const Complex&);
 
-		Complex operator*(float);
-		Complex operator*(const Complex&);
+		// Complex operator*(float);
+		// Complex operator*(const Complex&);
 
 };

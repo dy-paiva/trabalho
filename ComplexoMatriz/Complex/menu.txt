@@ -1,0 +1,5 @@
+Somar
+Subtrair
+Multiplicar
+Dividir
+Sair
