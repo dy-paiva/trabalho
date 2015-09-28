@@ -1,5 +1,3 @@
-Somar
-Subtrair
-Multiplicar
-Dividir
+Operação
+Objetos
 Sair

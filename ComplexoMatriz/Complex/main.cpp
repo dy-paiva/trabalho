@@ -1,15 +1,16 @@
 #include "../TerminalCuston/class_grafico.cpp"
 #include "classComplex.cpp"
+#include "claasGrafComp.cpp"
 
 int main() {
 	grafico vm("Complex");
-	Complex cx;
+	graf cx;
 	int opNum;
 	while(true){
 		opNum = vm.menu_();
 		if(opNum == 0) {
 			vm.telas_();
-			cx.somar();
+			cx.operacoes();
 		}
 	}
 		

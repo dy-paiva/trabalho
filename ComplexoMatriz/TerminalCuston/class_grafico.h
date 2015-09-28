@@ -85,7 +85,7 @@ class grafico{
   private:
     string menu[16];
     string texto[10];
-    int i,status_menu;
+    int i,status_menu, qtItens;
     char tecla;
 };
 

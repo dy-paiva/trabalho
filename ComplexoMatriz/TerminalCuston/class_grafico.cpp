@@ -10,7 +10,9 @@ grafico::grafico(string caminhoMenu){
 		textoFile = fopen("../Complex/texto.txt", "r");
 	}
 	int i = 0;
+	qtItens = 0;
 	while(fgets(linha, 50, menuFile) != NULL) {
+		qtItens++;
 		menu[i++] = linha;
 	}
 	i = 0;
@@ -107,8 +109,8 @@ int grafico::menu_(){
 			   status_menu++;
 			   break;
 		}
-		if(status_menu<0)status_menu=4;
-		if(status_menu>4)status_menu=0;
+		if(status_menu<0)status_menu=qtItens-1;
+		if(status_menu>qtItens-1)status_menu=0;
 		imprime_menu();
 	}
 	return 0;
@@ -118,8 +120,7 @@ int grafico::menu_(){
 
 void grafico::imprime_menu(){
 	for(i=0;i<16;i++){
-		int coluna = (9-(menu[i].size())/2);
-		imprime(5+i,coluna,menu[i],i==status_menu);
+		imprime(5+i,4,menu[i],i==status_menu);
 	}
 }
 
