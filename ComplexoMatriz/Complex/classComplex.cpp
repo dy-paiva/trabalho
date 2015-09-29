@@ -36,10 +36,17 @@ Complex Complex::operator*(float aIn) {
 }
 
 Complex Complex::operator*(const Complex& parm) {
-	//(ac + bdx²) + (bc+ad)x
 	return Complex(((this->a * parm.a) + ((this->b * parm.b) * -1)), ((this->b*parm.a + this->a*parm.b)));
 }
 
+float Complex::getR() {
+	return a;
+}
+
+float Complex::getI() {
+	return b;
+}
+
 void Complex::print() {
-  cout << "Real: " << a << " Imaginário: " << b << endl;
+  cout << "Real: " << a << " Imag: " << b << "i" << endl;
 }

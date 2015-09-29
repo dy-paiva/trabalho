@@ -1,12 +1,12 @@
 class Graf {
 	public:
-		Graf(vector<Complex>, vector<char>);
+		Graf(vector<Matrix>, vector<char>);
 		int init_tela();
 		void salvarDados();
 		void tela_operacao();
 		int validation(char, char);
 		void criar_objeto();
-		void lista_Complex();
+		void lista_Matrix();
 		void operacoes();
 		void result(char, char);
 		int objetos();
@@ -14,7 +14,7 @@ class Graf {
 		void color_selected(int, int, string*, int, int);
 		void telaExit();
 	private:
-		vector<Complex> obj;
+		vector<Matrix> obj;
 		vector<char> id;
 		string criarUsar[5], somarOp[5];
 		int qtCriarUsar, qtSomarOp;

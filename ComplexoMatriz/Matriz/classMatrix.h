@@ -8,7 +8,7 @@ class Matrix {
 	public:
 		Matrix(int, int);
 		int getLine();
-		int getColumm();
+		int getColumn();
 		int getValue(int, int);
 		void setValue(int, int, int);
 		void print();
@@ -17,7 +17,7 @@ class Matrix {
 		Matrix operator-(const Matrix&);
 		Matrix operator*(const Matrix&);
 	private:
-		int line, columm;
+		int line, column;
 		int **matrix;
 
 };

@@ -8,6 +8,9 @@ grafico::grafico(string caminhoMenu){
 	if(caminhoMenu == "Complex") {
 		menuFile = fopen("../Complex/menu.txt", "r");
 		textoFile = fopen("../Complex/texto.txt", "r");
+	} else {		
+		menuFile = fopen("../Matriz/menu.txt", "r");
+		textoFile = fopen("../Matriz/texto.txt", "r");
 	}
 	int i = 0;
 	qtItens = 0;

@@ -1,11 +1,12 @@
-#include "classGrafComp.h"
+#include "claasGrafMatr.h"
+#include <string.h>
 
-ostream& operator<<(ostream &Saida, Complex &cs) {
+ostream& operator<<(ostream &Saida, Matrix &cs) {
     cs.print();
     return Saida;
 }
 
-Graf::Graf(vector<Complex> objIn, vector<char> idIn) {
+Graf::Graf(vector<Matrix> objIn, vector<char> idIn) {
 	obj = objIn;
 	id = idIn;
 	criarUsar[0] = "Criar novo objeto";
@@ -20,10 +21,19 @@ Graf::Graf(vector<Complex> objIn, vector<char> idIn) {
 void Graf::salvarDados() {
 	FILE *dados;
 	vector<char>::iterator itId;
-	vector<Complex>::iterator itCx;
-	dados = fopen("dadosComplex.txt", "w");
+	vector<Matrix>::iterator itCx;
+	dados = fopen("dadosMatrix.txt", "w");
 	for(itId = id.begin(), itCx = obj.begin(); itCx != obj.end(); itCx++, itId++) {
-		fprintf(dados, "id: <%c> - Real: <%f> Img: <%f>\n", *itId, itCx->getR(), itCx->getI());
+		fprintf(dados, "%c %d %d\n", *itId, itCx->getLine(), itCx->getColumn());
+		int line = itCx->getLine();
+		int column = itCx->getColumn();
+		for(int i = 0; i < line; i++){
+			for(int j = 0; j < column; j++){
+				fprintf(dados, "%d", itCx->getValue(i, j));
+				if(j+1 != column) fprintf(dados, " ");
+			}
+			fprintf(dados, "\n");
+		}	
 	}
 	fclose(dados);
 }
@@ -38,7 +48,7 @@ void clearPage() {
 }
 
 void Graf::tela_operacao() {
-  vector<Complex>::iterator it1;
+  vector<Matrix>::iterator it1;
   vector<char>::iterator it2;
 	CONTORNO_VERDE;
   for (int i = 0; i < 20; i++){
@@ -49,8 +59,7 @@ void Graf::tela_operacao() {
   int i = 0;
   for (it1 = obj.begin(), it2 = id.begin(); it1 != obj.end(); it1++, it2++, i++) {
 		gotoxy(3+i, 52);
-		cout << "id: " << *it2 << " - ";
-		cout << *it1;
+		cout << "id: " << *it2 << " - Linha: " << it1->getLine() << " Coluna: " << it1->getColumn();
 	}
 }
 
@@ -103,7 +112,7 @@ int Graf::move_option(int size, string *var, int x, int y) {
 }
 
 void Graf::criar_objeto() {
-	int qtParam, qt;
+	int qt;
 	system("setterm -cursor on");
 	clearPage();
 	gotoxy(5, 18);
@@ -115,54 +124,35 @@ void Graf::criar_objeto() {
 	for(int i = 0; i < qt; i++) {
 		gotoxy(5, 18);
 		cout << "Para o " << i+1 << "º objeto, Digite:";
+		
+		char idIn;
+		int parm1, parm2;
 		gotoxy(7, 18);
-		cout << "Quantidade de parametros desejado ( 0 a 2): ";
-		cin >> qtParam;
-		if (qtParam == 0) {
-			char idIn;
-			gotoxy(9, 18);
-			idIn = 97+(obj.size());
-			printf("O identificador desse objeto é %c", idIn);
-			Complex tmp;
-			obj.push_back(tmp);
-			id.push_back(idIn);
-			gotoxy(10, 18);
-			cout << "Criado com sucesso, digite algo para continuar";
-			char a = getch();
-		} else {
-			if (qtParam == 1) {
-				char idIn;
-				int parm1;
-				gotoxy(9, 18);
-				idIn = 97+(obj.size());
+		idIn = 97+(obj.size());
+		printf("O identificador desse objeto é %c", idIn);
+		gotoxy(8, 18);
+		cout << "Digite o número de linha(s): ";
+		cin >> parm1;
+		gotoxy(9, 18);
+		cout << "Digite o número de coluna(s): ";
+		cin >> parm2;
+		Matrix tmp(parm1, parm2);
+		int valor;
+		for(int l = 0; l < parm1; l++) {
+			for(int c = 0; c < parm2; c++) {
+				clearPage();
+				gotoxy(5, 18);
 				printf("O identificador desse objeto é %c", idIn);
-				gotoxy(10, 18);
-				cout << "Digite o parametro desejado (somente números): ";
-				cin >> parm1;
-				Complex tmp(parm1);
-				obj.push_back(tmp);
-				id.push_back(idIn);
-			} else {
-				if (qtParam == 2) {
-					char idIn;
-					int parm1, parm2;
-					gotoxy(9, 18);
-					idIn = 97+(obj.size());
-					printf("O identificador desse objeto é %c", idIn);
-					gotoxy(10, 18);
-					cout << "Digite o 1º parametro (somente números): ";
-					cin >> parm1;
-					gotoxy(11, 18);
-					cout << "Digite o 2º parametro (somente números): ";
-					cin >> parm2;
-					Complex tmp(parm1, parm2);
-					obj.push_back(tmp);
-					id.push_back(idIn);
-				} else {
-					criar_objeto();
-				}
+				gotoxy(7, 18);
+				cout << "Digite o valor da matriz na posição (" << l << ", " << c << ") : ";
+				cin >> valor;
+				tmp.setValue(l,c,valor);
 			}
 		}
+
+		obj.push_back(tmp);
+		id.push_back(idIn);
+		
 		clearPage();
 	}
 }
@@ -191,38 +181,49 @@ int Graf::objetos(){
 	string option[] = {"Criar novo objeto", "Ver objetos criados", "voltar"};
 	clearPage();
 	gotoxy(5, 18);
-	if (!obj.empty()) {
-		cout << "Você possui " << obj.size() << " objetos contruido(s), o que deseja fazer ?";
-		
-		gotoxy(10, 18);
-		op = move_option(3, option, 7, 18);
-		
-		if(op == 0) {
-			criar_objeto();
-		}
-		if(op == 1) {
-			lista_Complex();
-		}
+	cout << "Você possui " << obj.size() << " objetos contruido(s), o que deseja fazer ?";
+	
+	gotoxy(10, 18);
+	op = move_option(3, option, 7, 18);
+	
+	if(op == 0) {
+		criar_objeto();
 	}
+	if(op == 1 && !obj.empty()) {
+		lista_Matrix();
+	}
+	return 0;
 }
 
-void Graf::lista_Complex() {
+void Graf::lista_Matrix() {
   clearPage();
-  vector<Complex>::iterator it1;
+  vector<Matrix>::iterator it1;
   vector<char>::iterator it2;
   RESETE;
-  int i = 0;
+  int k = 0;
+  char op;
   gotoxy(3, 25);
-  cout << "id" << "\tReal" << "\tImaginário";
-  for (it1 = obj.begin(), it2 = id.begin(); it1 != obj.end(); it1++, it2++, i++) {
-	gotoxy(5+i, 25);
-	cout << *it2 << "\t ";
-	cout << it1->getR() << "\t   " << it1->getI();
+  for (it1 = obj.begin(), it2 = id.begin(); it1 != obj.end(); it1++, it2++, k++) {
+	gotoxy(5+k, 25);
+	cout << "id: " << *it2;
+	cout << " Linha: " << it1->getLine();
+	cout << " Coluna: " << it1->getColumn();
   }
-  gotoxy(18, 25);
-  cout << "Digite algo para sair!";
+  gotoxy(7+k, 18);
+  system("setterm -cursor on");
+  cout << "Digite o id de uma das opções para ver detalhadamente: ";
+  cin >> op;
+  for (it1 = obj.begin(), it2 = id.begin(); it1 != obj.end(); it1++, it2++, k++) {
+	if(*it2 == op) {
+		clearPage();
+		cout << *it1;
+	}
+  }
+  gotoxy(18, 18);
+  cout << "Digite algo para sair";
   char a = getch();
-}
+  system("setterm -cursor off");
+ }
 
 void Graf::operacoes() {
 	system("setterm -cursor off");
@@ -244,20 +245,21 @@ void Graf::operacoes() {
 
 int Graf::validation(char parm1, char parm2) {
 	vector<char>::iterator itId;
-	vector<Complex>::iterator itCx;
-	Complex a;
-	Complex b;
+	vector<Matrix>::iterator itCx;
+	char aId, bId;
 	for(itCx = obj.begin(), itId = id.begin(); itId != id.end(); itId++, itCx++) {
 		if(parm1 == *itId) break;
 	}
 	if(itCx != obj.end()) {
-		a = *itCx;
+		Matrix a = *itCx;
+		aId = *itId;
 		for(itCx = obj.begin(), itId = id.begin(); itId != id.end(); itId++, itCx++) {
 			if(parm2 == *itId) break;
 		}
 		if(itCx != obj.end()) {
 			system("setterm -cursor off");
-			b = *itCx;
+			Matrix b = *itCx;
+			bId = *itId;
 			clearPage();
 			BRANCO;
 			NEGRITO;
@@ -266,36 +268,56 @@ int Graf::validation(char parm1, char parm2) {
 			gotoxy(10,25);
 			string opR[] = {"+", "-", "*"};
 			int op = move_option(3, opR, 7, 40);
-			Complex tmp;
 			clearPage();
 			BRANCO;
 			NEGRITO;
 			if(op == 0) {
-				tmp = a + b;
+				Matrix tmp = a + b;
 				gotoxy(5,26);
-				cout << "A soma do objeto: " << a;
+				cout << "A soma do objeto: " << aId;
 				gotoxy(6,26);
-				cout << " com o objeto: " << b;
-				gotoxy(7,32);
-				cout << " é: " << tmp;
+				cout << "com o objeto: " << bId;
+				gotoxy(7,26);
+				cout << "foi realizada, tecle algo para ver: ";
+				char e = getch();
+				clearPage();
+				cout << tmp;
 			} else {
 				if(op == 1){
-					tmp = a - b;
+					Matrix tmp = a - b;
 					gotoxy(5,26);
-					cout << "A subtração do objeto: " << a;
+					cout << "A subtração do objeto: " << aId;
 					gotoxy(6,26);
-					cout << " com o objeto: " << b;
-					gotoxy(7,32);
-					cout << " é: " << tmp;
+					cout << "com o objeto: " << bId;
+					gotoxy(7,26);
+					cout << "foi realizada, tecle algo para ver: ";
+					char e = getch();
+					clearPage();
+					cout << tmp;
 				} else {
 					if(op == 2){
-						tmp = a * b;
-						gotoxy(5,26);
-						cout << "A multiplicação do objeto: " << a;
-						gotoxy(6,26);
-						cout << " com o objeto: " << b;
-						gotoxy(7,32);
-						cout << " é: " << tmp;
+						if(a.getColumn() == b.getLine()){
+							Matrix tmp = a * b;
+							gotoxy(5,26);
+							cout << "A multiplicação do objeto: " << aId;
+							gotoxy(6,26);
+							cout << "com o objeto: " << bId;
+							gotoxy(7,26);
+							cout << "foi realizada, tecle algo para ver: ";
+							char e = getch();
+							clearPage();
+							cout << tmp;
+						} else {
+							gotoxy(5,26);
+							cout << "Não é possivel realizar a multiplicação do objeto: " << aId;
+							gotoxy(6,26);
+							cout << "com o objeto: " << bId;
+							gotoxy(8,26);
+							cout << "Tente novamente com outros objetos ou crie outro";
+							gotoxy(10,26);
+							cout << "Tecle algo para continuar";
+							char sx = getch();
+						}
 					}
 				}
 			}

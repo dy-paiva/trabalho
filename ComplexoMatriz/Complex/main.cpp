@@ -1,31 +1,38 @@
-#include "../TerminalCuston/class_grafico.cpp"
+#include "../includes.cpp"
+/////////////Arquivos//////////////
 #include "classComplex.cpp"
 #include "claasGrafComp.cpp"
+#include "../TerminalCuston/class_grafico.cpp"
+
+void initVector(vector<Complex> &cx, vector<char> &idIn) {
+	FILE *dados;
+	char id;
+	float a, b;
+	dados = fopen("dadosComplex.txt", "r");
+	while(fscanf(dados, "%*[^<]< %c %*[^<]< %f %*[^<]< %f", &id, &a, &b) != EOF) {
+		Complex tmp(a, b);
+		cx.push_back(tmp);
+		idIn.push_back(id);
+	}
+	fclose(dados);
+}
 
 int main() {
+	vector<Complex> complexVector;
+	vector<char> id;
+	initVector(complexVector, id);
 	grafico vm("Complex");
-	graf cx;
+	Graf cx(complexVector, id);
 	int opNum;
 	while(true){
 		opNum = vm.menu_();
-		if(opNum == 0) {
-			vm.telas_();
-			cx.operacoes();
+		if(opNum == 0)  cx.init_tela();
+		else if (opNum == 1) cx.objetos();
+		else if(opNum == 2) {
+			cx.telaExit();
+			break;
 		}
 	}
-		
-	// Complex a;
-	// Complex b(5);
-	// Complex c(3, 2);
-
-	// a = b + 5;
-	// a.print();
-	// a = a - c;
-	// a.print();
-	// a = a * b;
-	// a = a + c * (b + 7);
-	
-	// a.print();
 	
 	system("setterm -cursor on");
 	return 0;
